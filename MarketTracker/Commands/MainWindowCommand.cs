@@ -1,9 +1,8 @@
 ﻿namespace MarketTracker.Commands
 {
-    using MarketTracker.WebDriver;
     using MarketTracker.ViewModels;
+    using MarketTracker.WebDriver;
     using System;
-    using System.Windows;
     using System.Windows.Input;
 
     public class MainWindowCommand : ICommand
@@ -39,14 +38,20 @@
             switch(parameter.ToString())
             {
                 case "btStart":
-                    this.Start();
+                    this.StartDriver();
                     break;
             }
         }
 
-        private void Start()
+        private void StartDriver()
         {
+            var driver = new WebDriver();            
+            if(driver.Setup(this.ViewModel.Model.FTSEIndex))
+            {
+                driver.RunProcedures("sharecast");
+            }
 
+            driver.Dispose();
         }
     }
 }

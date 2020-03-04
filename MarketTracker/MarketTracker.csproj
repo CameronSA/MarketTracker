@@ -71,7 +71,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\Default.cs" />
+    <Compile Include="Data\FilePaths.cs" />
+    <Compile Include="WebDriver\Objects\Company.cs" />
+    <Compile Include="WebDriver\Objects\WebElements.cs" />
     <Compile Include="WebDriver\WebDriver.cs" />
+    <Compile Include="WebDriver\WebDriverData.cs" />
+    <Compile Include="WebDriver\WebDriverSetup.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
