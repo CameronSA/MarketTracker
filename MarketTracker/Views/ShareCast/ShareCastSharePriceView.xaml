@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="MarketTracker.Views.ShareCast.ShareCastSharePriceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MarketTracker.Views.ShareCast"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Converter" />
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ComboBox ItemsSource="{Binding Path=Model.FtseIndexes}" SelectedValue="{Binding Path=Model.FtseIndex, Mode=TwoWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom"/>
+            <ComboBox ItemsSource="{Binding Path=Model.CompanyNames100}" SelectedValue="{Binding Path=Model.SelectedCompany}"  Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Visibility="{Binding Path=Model.IsFtse100, Converter={StaticResource Converter}}"/>
+            <ComboBox ItemsSource="{Binding Path=Model.CompanyNames250}" SelectedValue="{Binding Path=Model.SelectedCompany}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Visibility="{Binding Path=Model.IsFtse250, Converter={StaticResource Converter}}"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

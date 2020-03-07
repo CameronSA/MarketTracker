@@ -3,16 +3,17 @@
     using MarketTracker.ViewModels;
     using MarketTracker.WebDriver;
     using System;
+    using System.Threading;
     using System.Windows.Input;
 
-    public class MainWindowCommand : ICommand
+    public class FtseIndexCommand : ICommand
     {
-        public MainWindowCommand(MainWindowViewModel viewModel)
+        public FtseIndexCommand(FtseIndexViewModel viewModel)
         {
             this.ViewModel = viewModel;
         }
 
-        public MainWindowViewModel ViewModel { get; private set; }
+        public FtseIndexViewModel ViewModel { get; private set; }
 
         public event EventHandler CanExecuteChanged
         {
@@ -45,13 +46,20 @@
 
         private void StartDriver()
         {
-            var driver = new WebDriver();            
-            if(driver.Setup(this.ViewModel.Model.FTSEIndex))
-            {
-                driver.RunProcedures("sharecast");
-            }
+           new Thread(new ThreadStart(DriverThread)).Start();            
+        }
 
-            driver.Dispose();
+        private void DriverThread()
+        {
+            if (WebDriver.Initialise(this.ViewModel.ApplicationViewModel))
+            {
+                if (WebDriver.Setup(this.ViewModel.Model.FTSEIndex))
+                {
+                    WebDriver.RunSetupProcedures("sharecast");
+                }
+
+                WebDriver.Dispose();
+            }
         }
     }
 }

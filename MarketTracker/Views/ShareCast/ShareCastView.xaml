@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="MarketTracker.Views.ShareCast.ShareCastView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MarketTracker.Views"
+             mc:Ignorable="d">
+    
+    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <Border BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Summary"/>
+                <Button Grid.Column="1" Content="Share Prices" Click="btSharePrice_Click"/>
+                <Button Grid.Column="2" Content="Financials"/>
+                <Button Grid.Column="3" Content="News"/>
+                <Button Grid.Column="4" Content="Charts"/>
+                <Button Grid.Column="5" Content="Technical Analysis"/>
+                <Button Grid.Column="6" Content="Director Deals"/>
+                <Button Grid.Column="7" Content="Broker Views"/>
+                <Button Grid.Column="8" Content="Star Ratings"/>
+                <Button Grid.Column="9" Content="Profile"/>
+            </Grid>
+        </Border>
+
+        <ContentControl x:Name="ContentArea" />
+    </StackPanel>
+</UserControl>

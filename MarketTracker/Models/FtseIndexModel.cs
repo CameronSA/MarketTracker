@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    public class MainWindowModel : INotifyPropertyChanged
+    public class FtseIndexModel : INotifyPropertyChanged
     {
         private int ftseIndex;
 

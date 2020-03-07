@@ -71,14 +71,41 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\ShareCastSharePriceCommand.cs" />
     <Compile Include="Data\Default.cs" />
     <Compile Include="Data\FilePaths.cs" />
+    <Compile Include="Models\ApplicationModel.cs" />
+    <Compile Include="Models\ShareCastSharePriceModel.cs" />
+    <Compile Include="ViewModels\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\ShareCastSharePriceViewModel.cs" />
+    <Compile Include="Views\Animations\LoadingSpinner.xaml.cs">
+      <DependentUpon>LoadingSpinner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ApplicationView.xaml.cs">
+      <DependentUpon>ApplicationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShareCast\ShareCastSharePriceView.xaml.cs">
+      <DependentUpon>ShareCastSharePriceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShareCast\ShareCastView.xaml.cs">
+      <DependentUpon>ShareCastView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WebDriver\Objects\Company.cs" />
     <Compile Include="WebDriver\Objects\WebElements.cs" />
     <Compile Include="WebDriver\WebDriver.cs" />
     <Compile Include="WebDriver\WebDriverData.cs" />
     <Compile Include="WebDriver\WebDriverSetup.cs" />
-    <Page Include="Views\MainWindow.xaml">
+    <Compile Include="WebDriver\WebsiteProtocols\ShareCast\Procedures\ShareCastSharePrices.cs" />
+    <Compile Include="WebDriver\WebsiteProtocols\ShareCast\ShareCast.cs" />
+    <Page Include="Views\Animations\LoadingSpinner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FtseIndexView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -86,13 +113,29 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\MainWindowCommand.cs" />
-    <Compile Include="Models\MainWindowModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Commands\FtseIndexCommand.cs" />
+    <Compile Include="Models\FtseIndexModel.cs" />
+    <Compile Include="ViewModels\FtseIndexViewModel.cs" />
+    <Compile Include="Views\FtseIndexView.xaml.cs">
+      <DependentUpon>FtseIndexView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ApplicationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShareCast\ShareCastSharePriceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShareCast\ShareCastView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

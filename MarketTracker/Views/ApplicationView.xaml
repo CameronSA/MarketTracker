@@ -1,0 +1,57 @@
+﻿<Controls:MetroWindow x:Class="MarketTracker.Views.ApplicationView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:Animations="clr-namespace:MarketTracker.Views.Animations"
+                      Title="Market Tracker"
+                      Height="800"
+                      Width="1200"
+                      WindowTitleBrush="DodgerBlue">
+
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Click="BtFtseIndex_Click" Content="Setup"/>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Converter" />
+    </Window.Resources>
+    
+    <DockPanel>
+        <!-- Navigation Buttons -->
+        <Border BorderThickness="1" BorderBrush="Black">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="top">
+                <TextBlock>Navigation</TextBlock>
+            </Label>
+                <Button VerticalAlignment="Center" Grid.Row="1" Click="BtHome_Click" Margin="5 5 5 5" Content="Home"/>
+                <Button VerticalAlignment="Center" Grid.Row="2" Click="BtFtseIndex_Click" Margin="5 5 5 5" Content="Setup"/>
+                <Button VerticalAlignment="Center" Grid.Row="3" Click="BtShareCast_Click" Margin="5 5 5 5" Content="ShareCast"/>
+                <!--<ProgressBar Margin="5 5 5 5" Grid.Row="10" IsIndeterminate="True" Visibility="{Binding Path=Model.DriverRunning, Converter={StaticResource Converter}}"/>-->
+                <Animations:LoadingSpinner Grid.Row="13" Diameter="40" Color1="DodgerBlue" Color2="Transparent" Visibility="{Binding Path=Model.DriverRunning, Converter={StaticResource Converter}}"/>
+            </Grid>
+        </Border>
+
+        <!-- Content Area -->
+        <ContentControl x:Name="ContentArea" />
+    </DockPanel>
+    
+</Controls:MetroWindow>

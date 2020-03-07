@@ -1,78 +1,95 @@
 ﻿namespace MarketTracker.WebDriver
 {
     using log4net;
-    using MarketTracker.Data;
+    using MarketTracker.ViewModels;
     using MarketTracker.WebDriver.Objects;
+    using MarketTracker.WebDriver.WebsiteProtocols.ShareCast;
+    using MarketTracker.WebDriver.WebsiteProtocols.ShareCast.Procedures;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Support.UI;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using System.Windows;
 
-    public class WebDriver : IDisposable
+    public class WebDriver
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private ChromeOptions chromeOptions { get; }
+        private static ChromeOptions chromeOptions;
 
-        private ChromeDriverService chromeDriverService { get; }
+        private static ChromeDriverService chromeDriverService;
         
-        public WebDriver()
+        public static ApplicationViewModel ViewModel { get; private set; }
+
+        public static bool Initialise(ApplicationViewModel viewModel)
         {
-            this.chromeOptions = new ChromeOptions();
-            this.chromeOptions.AddArgument("--incognito");
-            this.chromeDriverService = ChromeDriverService.CreateDefaultService();
-            this.chromeDriverService.HideCommandPromptWindow = true;
-            this.Driver = new ChromeDriver(this.chromeDriverService, this.chromeOptions);
+            if (viewModel.Model.DriverRunning || DriverRunning)
+            {
+                MessageBox.Show("Please wait for current process to finish before starting another one", "Market Tracker", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            viewModel.Model.DriverRunning = true;
+            DriverRunning = true;
+            ViewModel = viewModel;
+            chromeOptions = new ChromeOptions();
+            chromeOptions.AddArgument("--incognito");
+            chromeOptions.AddArgument("--headless");
+            chromeDriverService = ChromeDriverService.CreateDefaultService();
+            chromeDriverService.HideCommandPromptWindow = true;
+            Driver = new ChromeDriver(chromeDriverService, chromeOptions);
+            return true;
         }
 
-        public int ftseIndex { get; private set; }
+        public static bool DriverRunning { get; private set; }
+        
+        public static int FtseIndex { get; private set; }
 
-        public IWebDriver Driver { get; }
+        public static IWebDriver Driver { get; private set;}
 
-        public bool Setup(int ftseIndex)
+        public static bool Setup(int ftseIndex)
         {
-            this.ftseIndex = ftseIndex;
+            FtseIndex = ftseIndex;
             var setup = new WebDriverSetup(ftseIndex);
             return setup.Successful;
         }
 
-        public void RunProcedures(string websiteName)
+        public static void RunSetupProcedures(string websiteName)
         {
             try
             {
-                this.GetAllCompaniesAndUrls(websiteName);
+                GetAllCompaniesAndUrls(websiteName);
             }
             catch
             {
-                MessageBox.Show("Unexpected Error");
-                return;
+                MessageBox.Show("Unexpected Error", "Market Tracker", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         
-        public void Dispose()
+        public static void Dispose()
         {
-            this.Driver.Quit();
-            this.Driver.Dispose();
+            Driver.Quit();
+            Driver.Dispose();
+            ViewModel.Model.DriverRunning = false;
+            DriverRunning = false;
         }
         
-        private void GetAllCompaniesAndUrls(string websiteName) 
+        public static void GetAllCompaniesAndUrls(string websiteName)
         {
-            string websiteUrl = WebDriverData.MarketLinks[websiteName];
-            bool foundWebsite = this.Navigate(websiteUrl);
-            if(foundWebsite)
+            string websiteUrl = WebDriverData.MarketSites[websiteName];
+            bool foundWebsite = Navigate(websiteUrl);
+            if (foundWebsite)
             {
-                if(websiteName.ToLower() == "sharecast")
+                if (websiteName.ToLower() == "sharecast")
                 {
-                    var foundCompanies = this.GetShareCastCompaniesAndUrls();   
-                    
-                    if(!foundCompanies)
+                    var foundCompanies = ShareCast.GetCompaniesAndUrls();
+
+                    if (!foundCompanies)
                     {
                         log.Error("Could not find any companies from website with url '" + websiteUrl + "'");
-                        MessageBox.Show("Could not find any companies from website with url '" + websiteUrl + "'");
+                        MessageBox.Show("Could not find any companies from website with url '" + websiteUrl + "'", "Market Tracker", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                 }
@@ -80,41 +97,12 @@
             else
             {
                 log.Error("Could not find website with url '" + websiteUrl + "'");
-                MessageBox.Show("Could not find website with url '" + websiteUrl + "'");
+                MessageBox.Show("Could not find website with url '" + websiteUrl + "'", "Market Tracker", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
 
-        private bool GetShareCastCompaniesAndUrls()
-        {
-            WebElements webElements = this.GetShareCastDataElements();
-            var companies = new List<Company>();
-            if(!webElements.tableFound)
-            {
-                log.Error("Could not find ShareCast data elements");
-                MessageBox.Show("Could not find ShareCast data elements");
-                return false;
-            }
-
-            companies = this.GetCompanyNamesFromWebElements(webElements);
-            this.WriteToFile(FilePaths.DataDirectory + "CompanyNames" + this.ftseIndex + ".dat", companies);
-            log.Info(string.Format("All company names and urls written to file located at '{0}'. Count: {1}", FilePaths.DataDirectory + "CompanyNames" + this.ftseIndex + ".dat", companies.Count));
-            return true;
-        }
-
-        private void WriteToFile(string filePath, List<Company> companies)
-        {
-            using (StreamWriter file = new StreamWriter(filePath))
-            {
-                foreach (var company in companies)
-                {
-                    file.WriteLine(company.Name + "," + company.Url);
-                    log.Info(string.Format("Added company: '{0}' with url: '{1}' to file located at: '{2}'", company.Name, company.Url, filePath));
-                }
-            }
-        }
-
-        private List<Company> GetCompanyNamesFromWebElements(WebElements data)
+        public static List<Company> GetCompanyNamesFromWebElements(WebElements data)
         {
             var companies = new List<Company>();
             int columnIndex = 0;
@@ -165,55 +153,23 @@
             return companies;
         }
 
-        private WebElements GetShareCastDataElements()
+        public static void WriteToFile(string filePath, List<Company> companies)
         {
-            var webElements = new WebElements();
-            IWebElement headerElement = null;
-            IWebElement dataElement = null;
-            var wait = new WebDriverWait(this.Driver, TimeSpan.FromSeconds(10));
-            wait.PollingInterval = TimeSpan.FromSeconds(0.5);
-            var tableElements = wait.Until(x => x.FindElements(By.TagName("table")));
-            if (tableElements.Count != 1)
+            using (StreamWriter file = new StreamWriter(filePath))
             {
-                log.Error(string.Format("Found wrong number of instances of 'table' html element. Expected 1, found {0}", tableElements.Count.ToString()));
-                webElements.tableFound = false;
-                return webElements;
-            }
-            else
-            {
-                var theadElements = tableElements[0].FindElements(By.TagName("thead"));
-                var tbodyElements = tableElements[0].FindElements(By.TagName("tbody"));
-                headerElement = theadElements[0];
-                dataElement = tbodyElements[0];
-
-                if (theadElements.Count != 1)
+                foreach (var company in companies)
                 {
-                    log.Error(string.Format("Found wrong number of instances of 'thead' html element. Expected 1, found {0}", tableElements.Count.ToString()));
-                }
-
-                if (tbodyElements.Count != 1)
-                {
-                    log.Error(string.Format("Found wrong number of instances of 'tbody' html element. Expected 1, found {0}", tableElements.Count.ToString()));
-                }
-
-                if (theadElements.Count != 1 || tbodyElements.Count != 1)
-                {
-                    webElements.tableFound = false;
-                    return webElements;
+                    file.WriteLine(company.Name + "," + company.Url);
+                    log.Info(string.Format("Added company: '{0}' with url: '{1}' to file located at: '{2}'", company.Name, company.Url, filePath));
                 }
             }
-
-            webElements.tableFound = true;
-            webElements.headerElement = headerElement;
-            webElements.dataElement = dataElement;
-            return webElements;
         }
-
-        private bool Navigate(string websiteUrl)
+                     
+        public static bool Navigate(string websiteUrl)
         {
-            this.Driver.Navigate().GoToUrl(websiteUrl);
-            if ((this.Driver.Title.ToLower().Contains("page") && this.Driver.Title.ToLower().Contains("found"))
-                    || this.Driver.Title.ToLower().Contains("webfg.com"))
+            Driver.Navigate().GoToUrl(websiteUrl);
+            if ((Driver.Title.ToLower().Contains("page") && Driver.Title.ToLower().Contains("found"))
+                    || Driver.Title.ToLower().Contains("webfg.com"))
             {
                 log.Error(string.Format("Received an HTTP 404 error whilst attempting to access: '{0}' ({1})", websiteUrl, websiteUrl));
                 return false;
@@ -222,6 +178,5 @@
             log.Info(string.Format("Navigated to url: '{0}' ({1})", websiteUrl, websiteUrl));
             return true;
         }
-
     }
 }

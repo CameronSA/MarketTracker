@@ -17,7 +17,7 @@
             this.Successful = false;
             try
             {
-                this.ParseMarketSitesFile();
+                ParseMarketSitesFile();
                 this.Successful = true;
             }
             catch
@@ -28,7 +28,7 @@
 
         public bool Successful { get; private set; }
 
-        private void ParseMarketSitesFile()
+        public static void ParseMarketSitesFile()
         {
             string[] fileLines = File.ReadAllLines(FilePaths.MarketSites);
             foreach (var fileLine in fileLines)
@@ -41,7 +41,7 @@
                     throw new Exception();
                 }
 
-                if (!WebDriverData.MarketLinks.ContainsKey(fields[0]))
+                if (!WebDriverData.MarketSites.ContainsKey(fields[0].ToLower().Trim()))
                 {
                     bool parsed = int.TryParse(fields[1].Substring(fields[1].Length - 3, 3), out int index);
 
@@ -60,7 +60,7 @@
                         }
                     }
 
-                    WebDriverData.MarketLinks.Add(fields[0].Trim().ToLower(), fields[1].Trim());
+                    WebDriverData.MarketSites.Add(fields[0].Trim().ToLower(), fields[1].Trim());
                 }
             }
         }
