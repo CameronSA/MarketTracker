@@ -21,9 +21,9 @@ namespace MarketTracker.Views.ShareCast
     /// </summary>
     public partial class ShareCastSharePriceView : UserControl
     {
-        public ShareCastSharePriceView()
+        public ShareCastSharePriceView(ApplicationViewModel applicationViewModel)
         {
-            var viewModel = new ShareCastSharePriceViewModel();
+            var viewModel = new ShareCastSharePriceViewModel(applicationViewModel);
             InitializeComponent();
             this.DataContext = viewModel;
         }

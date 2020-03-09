@@ -36,7 +36,7 @@
 
         private void BtShareCast_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Content = new ShareCastView();
+            ContentArea.Content = new ShareCastView(this.viewModel);
         }
     }
 }

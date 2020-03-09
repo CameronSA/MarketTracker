@@ -67,7 +67,7 @@
                 MessageBox.Show("Unexpected Error", "Market Tracker", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        
+                
         public static void Dispose()
         {
             Driver.Quit();
@@ -177,6 +177,22 @@
 
             log.Info(string.Format("Navigated to url: '{0}' ({1})", websiteUrl, websiteUrl));
             return true;
+        }
+
+        public static string FindCompany(string companyName)
+        {
+            string companyUrl = string.Empty;
+            List<Company> companyList = FtseIndex == 100 ? WebDriverData.ShareCastCompanies100 : WebDriverData.ShareCastCompanies250;
+            foreach (var company in companyList)
+            {
+                if (company.Name == companyName)
+                {
+                    companyUrl = company.Url;
+                    break;
+                }
+            }
+
+            return companyUrl;
         }
     }
 }

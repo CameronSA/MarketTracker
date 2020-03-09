@@ -1,5 +1,6 @@
 ﻿namespace MarketTracker.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows;
@@ -15,6 +16,94 @@
         private string selectedCompany;
 
         private bool allCompaniesSelected;
+
+        private DateTime startDate;
+
+        private DateTime endDate;
+
+        private bool startDateIsToday;
+
+        private bool endDateIsToday;
+
+        private bool allRecords;
+
+        public bool AllRecords
+        {
+            get
+            {
+                return this.allRecords;
+            }
+
+            set
+            {
+                this.allRecords = value;
+                this.OnPropertyChanged("AllRecords");
+            }
+        }
+
+        public bool StartDateIsToday
+        {
+            get
+            {
+                return this.startDateIsToday;
+            }
+
+            set
+            {
+                this.startDateIsToday = value;
+                this.OnPropertyChanged("StartDateIsToday");
+                if(value)
+                {
+                    this.StartDate = DateTime.Today;
+                }
+            }
+        }
+
+        public bool EndDateIsToday
+        {
+            get
+            {
+                return this.endDateIsToday;
+            }
+
+            set
+            {
+                this.endDateIsToday = value;
+                this.OnPropertyChanged("EndDateIsToday");
+                if(value)
+                {
+                    this.EndDate = DateTime.Today;
+                }
+            }
+        }
+
+        public DateTime StartDate
+        {
+            get
+            {
+                return this.startDate;
+            }
+
+            set
+            {
+                this.startDate = value;
+                this.OnPropertyChanged("StartDate");
+            }
+        }
+
+        public DateTime EndDate
+        {
+            get
+            {
+                return this.endDate;
+            }
+
+            set
+            {
+                this.endDate = value;
+                this.OnPropertyChanged("EndDate");
+            }
+        }
 
         public bool IsFtse100
         {

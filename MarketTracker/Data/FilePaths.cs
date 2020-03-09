@@ -8,6 +8,8 @@
         
         public const string ShareCastCompanies100 = @"C:\Users\camme\source\repos\MarketTracker\MarketTrackerData\ShareCastCompanies100.dat";
         
-        public const string ShareCastCompanies250 = @"C:\Users\camme\source\repos\MarketTracker\MarketTrackerData\ShareCastCompanies250.dat";        
+        public const string ShareCastCompanies250 = @"C:\Users\camme\source\repos\MarketTracker\MarketTrackerData\ShareCastCompanies250.dat";
+
+        public const string ShareCastSharePriceDownloadDataDirectory = @"C:\Users\camme\source\repos\MarketTracker\MarketTrackerData\ShareCastSharePriceDownloads\";
     }
 }

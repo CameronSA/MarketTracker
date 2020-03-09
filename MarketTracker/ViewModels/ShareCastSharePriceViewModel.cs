@@ -3,22 +3,25 @@
     using MarketTracker.Commands;
     using MarketTracker.Data;
     using MarketTracker.Models;
+    using System;
     using System.Collections.Generic;
     using System.Windows.Input;
 
     public class ShareCastSharePriceViewModel
     {
-        public ShareCastSharePriceViewModel()
+        public ShareCastSharePriceViewModel(ApplicationViewModel applicationViewModel)
         {
             this.Model = new ShareCastSharePriceModel
             {
                 CompanyNames100 = new List<string>(),
                 CompanyNames250 = new List<string>(),
                 FtseIndex = Default.FTSEIndexes[0],
-                FtseIndexes = Default.FTSEIndexes
+                FtseIndexes = Default.FTSEIndexes,
+                EndDate = DateTime.Today,
+                StartDate = new DateTime(2009,01,01)
             };
 
-            this.Command = new ShareCastSharePriceCommand();
+            this.Command = new ShareCastSharePriceCommand(this, applicationViewModel);
 
             this.ConfigureViewModel();
         }

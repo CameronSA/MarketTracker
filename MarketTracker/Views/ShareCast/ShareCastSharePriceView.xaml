@@ -18,16 +18,32 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ComboBox ItemsSource="{Binding Path=Model.FtseIndexes}" SelectedValue="{Binding Path=Model.FtseIndex, Mode=TwoWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom"/>
+            <Label Content="FTSE Index" Grid.Row="0" Grid.Column="0"/>
+            <Label Content="Company Selection" Grid.Row="1" Grid.Column="0"/>
+            <ComboBox ItemsSource="{Binding Path=Model.FtseIndexes}" SelectedValue="{Binding Path=Model.FtseIndex, Mode=TwoWay}" Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom"/>
             <ComboBox ItemsSource="{Binding Path=Model.CompanyNames100}" SelectedValue="{Binding Path=Model.SelectedCompany}"  Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Visibility="{Binding Path=Model.IsFtse100, Converter={StaticResource Converter}}"/>
             <ComboBox ItemsSource="{Binding Path=Model.CompanyNames250}" SelectedValue="{Binding Path=Model.SelectedCompany}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Visibility="{Binding Path=Model.IsFtse250, Converter={StaticResource Converter}}"/>
+            <CheckBox IsChecked="{Binding Path=Model.AllCompaniesSelected}" Content="Select All Companies" Grid.Row="1" Grid.Column="2" Margin="10 0 0 0"/>
+
+            <Label Content="Start Date" Grid.Row="0" Grid.Column="3"/>
+            <DatePicker Grid.Column="4" Grid.Row="0" SelectedDate="{Binding Path=Model.StartDate}"/>
+            <CheckBox Margin="10 0 0 0" Grid.Row="0" Grid.Column="5" Content="Select Today" IsChecked="{Binding Path=Model.StartDateIsToday}" />
+            <Label Content="End Date" Grid.Row="1" Grid.Column="3"/>
+            <DatePicker Grid.Column="4" Grid.Row="1" SelectedDate="{Binding Path=Model.EndDate}"/>
+            <CheckBox Margin="10 0 0 0" Grid.Row="1" Grid.Column="5" Content="Select Today" IsChecked="{Binding Path=Model.EndDateIsToday}" />
+
+            <CheckBox Content="All Records" Grid.Row="0" Grid.Column="6" Grid.RowSpan="2" Margin="10 0 0 0" IsChecked="{Binding Path=AllRecords}"/>
+
+            <Button Content="Start" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" Margin="50 10 50 10" Command="{Binding Path=Command}" CommandParameter="btStart"/>
         </Grid>
     </StackPanel>
 </UserControl>
